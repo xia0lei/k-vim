@@ -155,6 +155,8 @@ set laststatus=2
 
 " 显示行号
 set number
+" 总是显示侧边栏(用于gitgutter/ale/coc)
+set signcolumn=yes
 " 取消换行
 set nowrap
 
@@ -565,6 +567,43 @@ nnoremap <leader>ev :vsp $MYVIMRC<CR>
 nnoremap <leader>ez :vsp ~/.zshrc<CR>
 nnoremap <leader>sv :source $MYVIMRC<CR>
 
+" coc.nvim 基础配置
+" 使用 tab 触发补全
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1) :
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" 回车确认补全
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" 跳转到定义/类型定义/实现/引用
+nmap <silent> <leader>jd <Plug>(coc-definition)
+nmap <silent> <leader>gy <Plug>(coc-type-definition)
+nmap <silent> <leader>gi <Plug>(coc-implementation)
+nmap <silent> <leader>gr <Plug>(coc-references)
+
+" 使用 K 显示文档说明
+nnoremap <silent> K :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('K', 'in')
+  endif
+endfunction
+
+" 符号重命名
+nmap <leader>rn <Plug>(coc-rename)
+
 "==========================================
 " FileType Settings  文件类型设置
 "==========================================
@@ -572,6 +611,10 @@ nnoremap <leader>sv :source $MYVIMRC<CR>
 " 具体编辑文件类型的一般设置，比如不要 tab 等
 autocmd FileType python set tabstop=4 shiftwidth=4 expandtab ai
 autocmd FileType ruby,javascript,html,css,xml set tabstop=2 shiftwidth=2 softtabstop=2 expandtab ai
+autocmd FileType lua set tabstop=4 shiftwidth=4 softtabstop=4 expandtab ai
+autocmd FileType go set tabstop=4 shiftwidth=4 softtabstop=4 noexpandtab ai
+autocmd FileType c,cpp set tabstop=4 shiftwidth=4 softtabstop=4 expandtab ai
+autocmd FileType proto set tabstop=4 shiftwidth=4 softtabstop=4 expandtab ai
 autocmd BufRead,BufNewFile *.md,*.mkd,*.markdown set filetype=markdown.mkd
 autocmd BufRead,BufNewFile *.part set filetype=html
 autocmd BufRead,BufNewFile *.vue setlocal filetype=vue.html.javascript tabstop=2 shiftwidth=2 softtabstop=2 expandtab ai

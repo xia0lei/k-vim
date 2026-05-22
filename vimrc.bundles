@@ -14,10 +14,13 @@ filetype off " required! turn off
 
 " ################### 插件管理 ###################
 
+" 增加超时时间
+let g:plug_timeout = 600
+
 " inspired by spf13, 自定义需要的插件集合
 if !exists('g:bundle_groups')
     " let g:bundle_groups=['python', 'javascript', 'golang', 'php', 'ruby', 'shell', 'markdown', 'html', 'css', 'less', 'coffeescript', 'tmux', 'json', 'beta']
-    let g:bundle_groups=['python', 'javascript', 'markdown', 'html', 'css', 'tmux', 'beta']
+    let g:bundle_groups=['python', 'javascript', 'markdown', 'html', 'css', 'tmux', 'beta', 'golang', 'lua', 'proto']
 endif
 
 " ----------------------------------------------------------------------------
@@ -43,9 +46,8 @@ Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets'
 
 " auto complete
 " 代码自动补全
-" 迄今为止用到的最好的自动VIM自动补全插件
-" 重启 :YcmRestartServer
-"Plug 'Valloric/YouCompleteMe'
+" 使用 coc.nvim 替代 YCM
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " 自动补全单引号，双引号等
 Plug 'Raimondi/delimitMate'
 " 自动补全html/xml标签
@@ -181,6 +183,16 @@ if count(g:bundle_groups, 'golang')
     " 2. :GoInstallBinaries
     " vimgo  https://github.com/fatih/vim-go
     Plug 'fatih/vim-go', {'for': 'go'}
+endif
+
+if count(g:bundle_groups, 'lua')
+    " lua support
+    Plug 'tbastos/vim-lua', {'for': 'lua'}
+endif
+
+if count(g:bundle_groups, 'proto')
+    " protobuf support
+    Plug 'uarun/vim-protobuf', {'for': 'proto'}
 endif
 
 
@@ -377,6 +389,8 @@ if has_key(g:plugs, 'ale')
     let g:ale_linters = {
     \   'python': ['flake8'],
     \   'javascript': ['eslint'],
+    \   'go': ['golint', 'go vet', 'gofmt'],
+    \   'lua': ['luacheck'],
     \}
 
     let g:ale_python_flake8_options="--ignore=E121,E123,E126,E226,E24,E704,W503 --max-line-length=120"
@@ -415,51 +429,51 @@ endif
 " ################### 自动补全 ###################
 
 " YouCompleteMe {{{
-    "youcompleteme  默认tab  s-tab 和自动补全冲突
-    "let g:ycm_key_list_select_completion=['<c-n>']
-    let g:ycm_key_list_select_completion = ['<Down>']
-    "let g:ycm_key_list_previous_completion=['<c-p>']
-    let g:ycm_key_list_previous_completion = ['<Up>']
-    let g:ycm_complete_in_comments = 1  "在注释输入中也能补全
-    let g:ycm_complete_in_strings = 1   "在字符串输入中也能补全
-    let g:ycm_use_ultisnips_completer = 1 "提示UltiSnips
-    let g:ycm_collect_identifiers_from_comments_and_strings = 1   "注释和字符串中的文字也会被收入补全
-    let g:ycm_collect_identifiers_from_tags_files = 1
-    " 开启语法关键字补全
-    let g:ycm_seed_identifiers_with_syntax=1
-    " 回车作为选中
-    let g:ycm_key_list_stop_completion = ['<CR>']
-
-    "let g:ycm_seed_identifiers_with_syntax=1   "语言关键字补全, 不过python关键字都很短，所以，需要的自己打开
-
-    " 跳转到定义处, 分屏打开
-    let g:ycm_goto_buffer_command = 'horizontal-split'
-    let g:ycm_register_as_syntastic_checker = 0
-    " nnoremap <leader>jd :YcmCompleter GoToDefinition<CR>
-    nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
-    nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
-
-    " 引入，可以补全系统，以及python的第三方包 针对新老版本YCM做了兼容
-    " old version
-    if !empty(glob("~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py"))
-        let g:ycm_global_ycm_extra_conf = "~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py"
-    endif
-    " new version
-    if !empty(glob("~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"))
-        let g:ycm_global_ycm_extra_conf = "~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"
-    endif
-    " new version
-    if !empty(glob("~/.vim/bundle/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py"))
-        let g:ycm_global_ycm_extra_conf = "~/.vim/bundle/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py"
-    endif
-
-    " 直接触发自动补全 insert模式下
-    " let g:ycm_key_invoke_completion = '<C-Space>'
-    " 黑名单,不启用
-    let g:ycm_filetype_blacklist = {
-        \ 'tagbar' : 1,
-        \ 'gitcommit' : 1,
-        \}
+"    "youcompleteme  默认tab  s-tab 和自动补全冲突
+"    "let g:ycm_key_list_select_completion=['<c-n>']
+"    let g:ycm_key_list_select_completion = ['<Down>']
+"    "let g:ycm_key_list_previous_completion=['<c-p>']
+"    let g:ycm_key_list_previous_completion = ['<Up>']
+"    let g:ycm_complete_in_comments = 1  "在注释输入中也能补全
+"    let g:ycm_complete_in_strings = 1   "在字符串输入中也能补全
+"    let g:ycm_use_ultisnips_completer = 1 "提示UltiSnips
+"    let g:ycm_collect_identifiers_from_comments_and_strings = 1   "注释和字符串中的文字也会被收入补全
+"    let g:ycm_collect_identifiers_from_tags_files = 1
+"    " 开启语法关键字补全
+"    let g:ycm_seed_identifiers_with_syntax=1
+"    " 回车作为选中
+"    let g:ycm_key_list_stop_completion = ['<CR>']
+"
+"    "let g:ycm_seed_identifiers_with_syntax=1   "语言关键字补全, 不过python关键字都很短，所以，需要的自己打开
+"
+"    " 跳转到定义处, 分屏打开
+"    let g:ycm_goto_buffer_command = 'horizontal-split'
+"    let g:ycm_register_as_syntastic_checker = 0
+"    " nnoremap <leader>jd :YcmCompleter GoToDefinition<CR>
+"    nnoremap <leader>jd :YcmCompleter GoToDefinitionElseDeclaration<CR>
+"    nnoremap <leader>gd :YcmCompleter GoToDeclaration<CR>
+"
+"    " 引入，可以补全系统，以及python的第三方包 针对新老版本YCM做了兼容
+"    " old version
+"    if !empty(glob("~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py"))
+"        let g:ycm_global_ycm_extra_conf = "~/.vim/bundle/YouCompleteMe/cpp/ycm/.ycm_extra_conf.py"
+"    endif
+"    " new version
+"    if !empty(glob("~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"))
+"        let g:ycm_global_ycm_extra_conf = "~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py"
+"    endif
+"    " new version
+"    if !empty(glob("~/.vim/bundle/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py"))
+"        let g:ycm_global_ycm_extra_conf = "~/.vim/bundle/YouCompleteMe/third_party/ycmd/examples/.ycm_extra_conf.py"
+"    endif
+"
+"    " 直接触发自动补全 insert模式下
+"    " let g:ycm_key_invoke_completion = '<C-Space>'
+"    " 黑名单,不启用
+"    let g:ycm_filetype_blacklist = {
+"        \ 'tagbar' : 1,
+"        \ 'gitcommit' : 1,
+"        \}
 " }}}
 
 
@@ -657,7 +671,7 @@ endif
     " 同git diff,实时展示文件中修改的行
     " 只是不喜欢除了行号多一列, 默认关闭,gs时打开
     let g:gitgutter_map_keys = 0
-    let g:gitgutter_enabled = 0
+    let g:gitgutter_enabled = 1
     let g:gitgutter_highlight_lines = 1
     nnoremap <leader>gs :GitGutterToggle<CR>
 " }}}
@@ -848,6 +862,10 @@ endif
     let g:go_highlight_structs = 1
     let g:go_highlight_operators = 1
     let g:go_highlight_build_constraints = 1
+    let g:go_highlight_types = 1
+    let g:go_highlight_fields = 1
+    let g:go_highlight_variable_declarations = 1
+    let g:go_highlight_variable_assignments = 1
 
     let g:go_fmt_fail_silently = 1
     " format with goimports instead of gofmt
