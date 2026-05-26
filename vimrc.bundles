@@ -344,7 +344,7 @@ if has_key(g:plugs, 'syntastic')
             Errors
         endif
     endfunction
-    nnoremap <Leader>s :call ToggleErrors()<cr>
+    nnoremap <Leader>se :call ToggleErrors()<cr>
 
     " ,en ,ep to jump between errors
     function! <SID>LocationPrevious()
@@ -417,7 +417,7 @@ if has_key(g:plugs, 'ale')
             lopen
         endif
     endfunction
-    nnoremap <Leader>s :call ToggleErrors()<cr>
+    nnoremap <Leader>se :call ToggleErrors()<cr>
 
     let g:ale_set_highlights = 1
     highlight clear ALEErrorSign
@@ -613,6 +613,10 @@ endif
     let g:ctrlp_match_window_reversed=0
     let g:ctrlp_mruf_max=500
     let g:ctrlp_follow_symlinks=1
+    let g:ctrlp_prompt_mappings = {
+        \ 'AcceptSelection("v")': ['<c-g>', '<F2>'],
+        \ 'AcceptSelection("h")': ['<c-o>', '<F3>'],
+        \ }
     " 如果安装了ag, 使用ag
     " if executable('ag')
     " " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore

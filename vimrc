@@ -565,7 +565,11 @@ nnoremap U <C-r>
 " edit vimrc/zshrc and load vimrc bindings
 nnoremap <leader>ev :vsp $MYVIMRC<CR>
 nnoremap <leader>ez :vsp ~/.zshrc<CR>
-nnoremap <leader>sv :source $MYVIMRC<CR>
+nnoremap <leader>ss :source $MYVIMRC<CR>
+
+" 分屏并打开新文件
+nnoremap <leader>sv :vsplit<cr>:CtrlP<cr>
+nnoremap <leader>sx :split<cr>:CtrlP<cr>
 
 " coc.nvim 基础配置
 " 使用 tab 触发补全
