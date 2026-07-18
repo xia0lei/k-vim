@@ -51,14 +51,8 @@ filetype plugin indent on
 " history存储容量
 set history=2000
 
-" 检测文件类型
-filetype on
-" 针对不同的文件类型采用不同的缩进格式
-filetype indent on
-" 允许插件
-filetype plugin on
-" 启动自动补全
-filetype plugin indent on
+" filetype 检测/缩进/插件已在上方 bundle 加载后统一开启 (filetype plugin indent on)
+" 此处不再重复设置, 避免冗余
 
 " 文件修改之后自动载入
 set autoread
@@ -89,10 +83,10 @@ set noswapfile
   " " set undodir=/tmp/vimundo/
 " endif
 
-set wildignore=*.swp,*.bak,*.pyc,*.class,.svn
+set wildignore=*.swp,*.bak,*.o,*~,*.pyc,*.class,.svn
 
-" 突出显示当前列
-set cursorcolumn
+" 突出显示当前列 - 已关闭: coc diagnostic + 大文件下 cursorcolumn 显著拖慢渲染
+" set cursorcolumn
 " 突出显示当前行
 set cursorline
 
@@ -236,14 +230,7 @@ au FocusGained * :set relativenumber
 " 插入模式下用绝对行号, 普通模式下用相对
 autocmd InsertEnter * :set norelativenumber number
 autocmd InsertLeave * :set relativenumber
-function! NumberToggle()
-  if(&relativenumber == 1)
-    set norelativenumber number
-  else
-    set relativenumber
-  endif
-endfunc
-nnoremap <C-n> :call NumberToggle()<cr>
+" 注: 行号自动切换已由 InsertEnter/Leave + FocusGained/Lost 完成, 不再占用 <C-n>(原生补全键)
 
 " 防止tmux下vim的背景色显示异常
 " Refer: http://sunaku.github.io/vim-256color-bce.html
@@ -290,14 +277,12 @@ set completeopt=longest,menu
 
 " 增强模式中的命令行自动完成操作
 set wildmenu
-" Ignore compiled files
-set wildignore=*.o,*~,*.pyc,*.class
+" Ignore compiled files (wildignore 已在 General Settings 段统一设置)
 
 " 离开插入模式后自动关闭预览窗口
 autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 
-" 回车即选中当前项
-inoremap <expr> <CR>       pumvisible() ? "\<C-y>" : "\<CR>"
+" Note: <CR> 补全确认由下方 coc 段统一处理，此处不再重复映射
 
 " In the quickfix window, <CR> is used to jump to the error under the
 " cursor, so undefine the mapping there.
@@ -443,9 +428,7 @@ nnoremap <silent> g* g*zz
 " 去掉搜索高亮
 noremap <silent><leader>/ :nohls<CR>
 
-" switch # *
-nnoremap # *
-nnoremap * #
+" 注: # 和 * 恢复 vim 默认行为(# 向后搜索光标下单词, * 向前), 避免与插件及他人环境不一致
 
 " for # indent, python文件中输入新行时#号注释不切回行首
 autocmd BufNewFile,BufRead *.py inoremap # X<c-h>#
@@ -456,9 +439,7 @@ autocmd BufNewFile,BufRead *.py inoremap # X<c-h>#
 " 切换前后buffer
 nnoremap [b :bprevious<cr>
 nnoremap ]b :bnext<cr>
-" 使用方向键切换buffer
-noremap <left> :bp<CR>
-noremap <right> :bn<CR>
+" 注: 方向键已在上方统一禁用(强迫 hjkl), buffer 切换用 [b / ]b
 
 
 " tab 操作
@@ -704,7 +685,7 @@ endif
 set background=dark
 set t_Co=256
 
-" colorscheme solarized
+"colorscheme solarized
 colorscheme molokai
 
 
