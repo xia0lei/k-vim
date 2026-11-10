@@ -168,6 +168,8 @@ LuaLS 会读取项目根的 `.luarc.json`（如果项目提供），其中可配
 
 `,f` 是项目内 MRU，`,p` 是项目文件搜索，`,P` 会显式使用当前文件的 git 根目录打开文件搜索。三者以当前文件的 git 根目录为范围；当前文件不在 git 仓库内时回退当前目录，部署目录不会进入项目搜索范围。
 
+CtrlP 默认会排除当前打开的文件；overlay 已设置 `g:ctrlp_match_current_file = 1`，所以打开 `msgagent.lua` 后再按 `,p` / `,P` 仍然能看到它。
+
 ## 7. Python、Shell、Markdown、Proto、Go
 
 ### Python
@@ -419,6 +421,10 @@ Plug 'rishi-opensource/vim-claude-code', { 'tag': 'v1.4.1' }
 - 两个 Agent 都会受各自的项目规则和权限模式约束，不要在 Vim 配置里另写一套业务规则。
 
 ## 11. 常见问题
+
+### 打开文件后 `,p` / `,P` 看不到当前文件
+
+CtrlP 默认排除当前打开的文件。overlay 已设置 `g:ctrlp_match_current_file = 1`；如果仍然看不到，执行 `:ReloadLocal` 或重启 Vim，再检查 `:echo g:ctrlp_match_current_file` 是否为 1。
 
 ### `,f` 里还出现部署目录
 

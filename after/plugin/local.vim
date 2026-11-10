@@ -81,6 +81,8 @@ endif
 " Keep CtrlP file search and MRU scoped to the current project root.
 let g:ctrlp_working_path_mode = 'r'
 let g:ctrlp_mruf_relative = 1
+" CtrlP excludes the current file by default; include it in file search.
+let g:ctrlp_match_current_file = 1
 " Refresh CtrlP's cached MRU options when this overlay is re-sourced.
 if exists('*ctrlp#mrufiles#opts')
   silent! call ctrlp#mrufiles#opts()
