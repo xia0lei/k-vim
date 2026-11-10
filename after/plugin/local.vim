@@ -169,6 +169,9 @@ augroup END
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
+" Open definitions in a horizontal split instead of replacing the current buffer.
+nnoremap <silent> <leader>jd :call CocActionAsync('jumpDefinition', 'split')<CR>
+
 " Project-wide ripgrep; type the pattern after the command.
 nnoremap <silent> <leader>gg :grep!<space>
 
