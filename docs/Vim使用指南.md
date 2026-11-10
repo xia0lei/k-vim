@@ -93,7 +93,7 @@ k-vim 原有的 `,` 是 leader。以下只列高频操作。
 |---|---|
 | `,w` / `,q` | 保存 / 退出 |
 | `,p` | CtrlP 文件搜索（已用 rg 作为文件源） |
-| `,f` | 最近文件 MRU |
+| `,f` | 项目内最近文件 MRU |
 | `,fu` / `,fU` | CtrlPFunky 函数搜索 / 光标下单词搜索 |
 | `\` | CtrlSF 全文搜索（自动使用 rg 后端） |
 | `,gg` | `:grep` 全文搜索，输入 pattern 后回车；结果进入 quickfix |
@@ -154,7 +154,7 @@ LuaLS 会读取项目根的 `.luarc.json`（如果项目提供），其中可配
 | 场景 | 命令 |
 |---|---|
 | 按文件名查找 | `,p` 或 `:CtrlP` |
-| 最近文件 | `,f` |
+| 项目内最近文件 | `,f` |
 | 当前文件函数 | `,fu` |
 | 全项目内容搜索 | `\`（CtrlSF）或 `,gg`（`:grep`） |
 | 当前 buffer 符号 | `:CocList symbols` |
@@ -163,6 +163,8 @@ LuaLS 会读取项目根的 `.luarc.json`（如果项目提供），其中可配
 | 打开 quickfix | `:copen` |
 
 `:grep` 已配置为 `rg --vimgrep --smart-case --hidden -g "!.git/*"`，结果格式为 `file:line:col:message`，可以直接在 quickfix 中跳转。CtrlP 也使用 `rg --files`，会遵循 `.gitignore`。
+
+`,f` 是项目内 MRU，`,p` 是项目文件搜索。两者以当前文件的 git 根目录为范围；当前文件不在 git 仓库内时回退当前目录，部署目录不会进入项目搜索范围。
 
 ## 7. Python、Shell、Markdown、Proto、Go
 
@@ -415,6 +417,10 @@ Plug 'rishi-opensource/vim-claude-code', { 'tag': 'v1.4.1' }
 - 两个 Agent 都会受各自的项目规则和权限模式约束，不要在 Vim 配置里另写一套业务规则。
 
 ## 11. 常见问题
+
+### `,f` 里还出现部署目录
+
+`,f` 现在是项目内 MRU。overlay 会在打开前把窗口 cwd 切到当前文件的 git 根；如果仍出现部署目录，执行 `:ReloadLocal` 或重启 Vim，并用 `:pwd`、`:verbose map ,f` 确认当前文件位于项目内。MRU 缓存本身不会删除，只是按项目过滤。
 
 ### `,tc` 没有反应
 

@@ -78,6 +78,14 @@ if executable('rg')
   let g:ctrlp_use_caching = 0
 endif
 
+" Keep CtrlP file search and MRU scoped to the current project root.
+let g:ctrlp_working_path_mode = 'r'
+let g:ctrlp_mruf_relative = 1
+" Refresh CtrlP's cached MRU options when this overlay is re-sourced.
+if exists('*ctrlp#mrufiles#opts')
+  silent! call ctrlp#mrufiles#opts()
+endif
+
 " ---------------------------------------------------------------------------
 " Lint: coc handles Lua/Go LSP; ALE keeps Python/JS/shell linters.
 " Lua/Go ALE is disabled to avoid duplicate diagnostics with coc-lua/coc-go.
@@ -107,6 +115,16 @@ function! s:ProjectRoot() abort
   let l:root = systemlist('git -C ' . shellescape(expand('%:p:h')) . ' rev-parse --show-toplevel 2>/dev/null')
   return (v:shell_error == 0 && !empty(l:root)) ? l:root[0] : getcwd()
 endfunction
+
+function! s:CtrlPMRUProject() abort
+  let l:root = s:ProjectRoot()
+  if !empty(l:root)
+    execute 'lcd ' . fnameescape(l:root)
+  endif
+  CtrlPMRU
+endfunction
+
+nnoremap <silent> <leader>f :call <SID>CtrlPMRUProject()<CR>
 
 function! s:LuaCompiler(root) abort
   if exists('b:lua_check_compiler') && !empty(b:lua_check_compiler)
