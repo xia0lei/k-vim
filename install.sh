@@ -82,7 +82,10 @@ else
 fi
 export SHELL=$system_shell
 
-echo "Step4: Finalizing coc.nvim"
+echo "Step4: linking coc settings"
+bash "$CURRENT_DIR/scripts/link-coc-settings.sh"
+
+echo "Step5: Finalizing coc.nvim"
 echo "Please remember to install language servers in Vim:"
 echo ":CocInstall coc-clangd coc-go coc-lua"
 

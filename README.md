@@ -19,6 +19,12 @@ k-vim
 
 **PPS**: 一份tmux配置 [k-tmux](https://github.com/wklken/k-tmux)
 
+# 本项目说明
+
+详细安装、快捷键、Lua/Claude/Codex 和主题说明见 [docs/Vim使用指南.md](docs/Vim使用指南.md)。
+
+`install.sh --for-vim` 会安装插件，并调用 `scripts/link-coc-settings.sh` 将仓库内的 `coc-settings.json` 链接到 `~/.config/coc/coc-settings.json`。
+
 ---------------------------------
 
 ---------------------------------
