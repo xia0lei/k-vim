@@ -1,0 +1,6 @@
+{
+  "workspace.rootPatterns": [".git", ".luarc.json"],
+  "extensions.updateCheck": "never",
+  "diagnostic.checkCurrentLine": true,
+  "suggest.noselect": false
+}
