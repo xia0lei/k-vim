@@ -131,7 +131,6 @@ function! s:CtrlPProject() abort
 endfunction
 
 nnoremap <silent> <leader>f :call <SID>CtrlPMRUProject()<CR>
-nnoremap <silent> <leader>P :call <SID>CtrlPProject()<CR>
 command! CtrlPProject call <SID>CtrlPProject()
 
 function! s:LuaCompiler(root) abort

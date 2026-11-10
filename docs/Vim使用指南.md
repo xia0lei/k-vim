@@ -93,7 +93,6 @@ k-vim 原有的 `,` 是 leader。以下只列高频操作。
 |---|---|
 | `,w` / `,q` | 保存 / 退出 |
 | `,p` | CtrlP 文件搜索（已用 rg 作为文件源） |
-| `,P` | 显式从当前文件的 git 根打开 CtrlP 文件搜索 |
 | `,f` | 项目内最近文件 MRU |
 | `,fu` / `,fU` | CtrlPFunky 函数搜索 / 光标下单词搜索 |
 | `\` | CtrlSF 全文搜索（自动使用 rg 后端） |
@@ -155,7 +154,7 @@ LuaLS 会读取项目根的 `.luarc.json`（如果项目提供），其中可配
 | 场景 | 命令 |
 |---|---|
 | 按文件名查找 | `,p` 或 `:CtrlP` |
-| 强制从当前项目根查找 | `,P` 或 `:CtrlPProject` |
+| 显式指定项目根 | `:CtrlPProject` |
 | 项目内最近文件 | `,f` |
 | 当前文件函数 | `,fu` |
 | 全项目内容搜索 | `\`（CtrlSF）或 `,gg`（`:grep`） |
@@ -166,9 +165,9 @@ LuaLS 会读取项目根的 `.luarc.json`（如果项目提供），其中可配
 
 `:grep` 已配置为 `rg --vimgrep --smart-case --hidden -g "!.git/*"`，结果格式为 `file:line:col:message`，可以直接在 quickfix 中跳转。CtrlP 也使用 `rg --files`，会遵循 `.gitignore`。
 
-`,f` 是项目内 MRU，`,p` 是项目文件搜索，`,P` 会显式使用当前文件的 git 根目录打开文件搜索。三者以当前文件的 git 根目录为范围；当前文件不在 git 仓库内时回退当前目录，部署目录不会进入项目搜索范围。
+`,f` 是项目内 MRU，`,p` 是项目文件搜索。两者以当前文件的 git 根目录为范围；当前文件不在 git 仓库内时回退当前目录，部署目录不会进入项目搜索范围。需要显式指定项目根时使用 `:CtrlPProject`。
 
-CtrlP 默认会排除当前打开的文件；overlay 已设置 `g:ctrlp_match_current_file = 1`，所以打开 `msgagent.lua` 后再按 `,p` / `,P` 仍然能看到它。
+CtrlP 默认会排除当前打开的文件；overlay 已设置 `g:ctrlp_match_current_file = 1`，所以打开 `msgagent.lua` 后再按 `,p` 仍然能看到它。
 
 ## 7. Python、Shell、Markdown、Proto、Go
 
@@ -422,7 +421,7 @@ Plug 'rishi-opensource/vim-claude-code', { 'tag': 'v1.4.1' }
 
 ## 11. 常见问题
 
-### 打开文件后 `,p` / `,P` 看不到当前文件
+### 打开文件后 `,p` 看不到当前文件
 
 CtrlP 默认排除当前打开的文件。overlay 已设置 `g:ctrlp_match_current_file = 1`；如果仍然看不到，执行 `:ReloadLocal` 或重启 Vim，再检查 `:echo g:ctrlp_match_current_file` 是否为 1。
 
