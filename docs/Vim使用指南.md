@@ -68,7 +68,7 @@ lua-language-server --version
 node --version
 ```
 
-当前 Vim 是 9.2，带 `+python3`、`+job`、`+timers`，但**不带 `+lua`**。因此不要安装依赖 Vim Lua 接口的插件；现有插件都是 Vimscript、Node 或外部 LSP。
+当前 Vim 是 9.2，带 `+lua`（Lua 5.4.4）、`+python3`、`+job`、`+timers` 和 `+terminal`。Lua 5.4.4 编译安装在 `/opt/lua-5.4.4`，`vim --version` 应显示 `+lua`。可以运行 Vim 兼容的 Lua 插件，但 Neovim 专用 Lua 插件仍不能直接使用。
 
 在项目根目录打开 Vim，确认 Coc 已启动：
 
@@ -261,7 +261,7 @@ coc 扩展可单独安装：
 
 该脚本通过 npm 安装与 `:CocInstall` 相同的扩展；Node 20 环境会自动选择兼容的 `coc-css@2.1.0`。自动安装失败时，可在 Vim 中手动执行 `:CocInstall coc-clangd coc-css coc-json coc-lua coc-go coc-pyright`。
 
-新增插件前先确认它不依赖 Vim 的 `+lua` 特性。当前 Vim 是 `-lua`，Neovim 专用插件不能直接使用。
+Vim 已启用 `+lua`（Lua 5.4.4），可以运行 Vim 兼容的 Lua 插件；Neovim 专用插件仍不能直接使用。
 
 ### 8.4 主题
 
