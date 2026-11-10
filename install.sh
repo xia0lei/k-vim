@@ -85,8 +85,12 @@ export SHELL=$system_shell
 echo "Step4: linking coc settings"
 bash "$CURRENT_DIR/scripts/link-coc-settings.sh"
 
-echo "Step5: Finalizing coc.nvim"
-echo "Please remember to install language servers in Vim:"
-echo ":CocInstall coc-clangd coc-go coc-lua"
+echo "Step5: installing coc extensions"
+if $FOR_VIM; then
+    bash "$CURRENT_DIR/scripts/install-coc-extensions.sh"
+else
+    echo "Neovim selected; install coc extensions manually in nvim:"
+    echo ":CocInstall coc-clangd coc-css coc-json coc-lua coc-go coc-pyright"
+fi
 
 echo "Install Done!"

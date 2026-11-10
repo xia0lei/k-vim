@@ -28,10 +28,16 @@
 git clone git@github.com:xia0lei/k-vim.git
 cd k-vim
 ./install.sh --for-vim
-# install.sh 会安装插件并调用 scripts/link-coc-settings.sh
+# install.sh 会安装 vim-plug 插件、链接 coc 设置并安装 coc 扩展
 ```
 
-安装完成后在 Vim 中安装 coc 扩展：
+如果自动安装失败，可手动执行：
+
+```bash
+<repo>/scripts/install-coc-extensions.sh
+```
+
+或在 Vim 中执行：
 
 ```vim
 :CocInstall coc-clangd coc-css coc-json coc-lua coc-go coc-pyright
@@ -246,6 +252,14 @@ let b:lua_check_compiler = '/path/to/luac' " 当前 buffer
 :PlugUpdate
 :PlugClean
 ```
+
+coc 扩展可单独安装：
+
+```bash
+<repo>/scripts/install-coc-extensions.sh
+```
+
+该脚本通过 npm 安装与 `:CocInstall` 相同的扩展；Node 20 环境会自动选择兼容的 `coc-css@2.1.0`。自动安装失败时，可在 Vim 中手动执行 `:CocInstall coc-clangd coc-css coc-json coc-lua coc-go coc-pyright`。
 
 新增插件前先确认它不依赖 Vim 的 `+lua` 特性。当前 Vim 是 `-lua`，Neovim 专用插件不能直接使用。
 

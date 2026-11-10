@@ -23,7 +23,7 @@ k-vim
 
 详细安装、快捷键、Lua/Claude/Codex 和主题说明见 [docs/Vim使用指南.md](docs/Vim使用指南.md)。
 
-`install.sh --for-vim` 会安装插件，并调用 `scripts/link-coc-settings.sh` 将仓库内的 `coc-settings.json` 链接到 `~/.config/coc/coc-settings.json`。
+`install.sh --for-vim` 会安装 vim-plug 插件，调用 `scripts/link-coc-settings.sh` 将仓库内的 `coc-settings.json` 链接到 `~/.config/coc/coc-settings.json`，并调用 `scripts/install-coc-extensions.sh` 安装 coc 扩展。
 
 ---------------------------------
 
