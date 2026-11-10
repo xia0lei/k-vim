@@ -124,7 +124,13 @@ function! s:CtrlPMRUProject() abort
   CtrlPMRU
 endfunction
 
+function! s:CtrlPProject() abort
+  execute 'CtrlP ' . fnameescape(s:ProjectRoot())
+endfunction
+
 nnoremap <silent> <leader>f :call <SID>CtrlPMRUProject()<CR>
+nnoremap <silent> <leader>P :call <SID>CtrlPProject()<CR>
+command! CtrlPProject call <SID>CtrlPProject()
 
 function! s:LuaCompiler(root) abort
   if exists('b:lua_check_compiler') && !empty(b:lua_check_compiler)
